@@ -75,20 +75,6 @@ Semua route API diamankan dengan middleware Sanctum:
 
 ---
 
-## 🖼️ Cuplikan Halaman
-
-> 📸 Ganti link berikut dengan screenshot dari proyekmu sendiri
-
-**Dashboard Admin**
-![dashboard](https://source.unsplash.com/featured/?dashboard)
-
-**Halaman Transaksi**
-![transaksi](https://source.unsplash.com/featured/?cashier)
-
-**Landing Page**
-![landing](https://source.unsplash.com/featured/?coffee)
-
----
 
 ## 📂 Struktur Project
 
