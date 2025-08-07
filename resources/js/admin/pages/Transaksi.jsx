@@ -142,9 +142,9 @@ export default function Transaksi() {
     }
   };
 
-  return (
-    <div className="space-y-6 p-6">
-      <div className="flex justify-between items-center">
+ return (
+    <div className="space-y-6 p-4 md:p-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <h1 className="text-xl font-semibold text-gray-700">🧾 Transaksi Kasir</h1>
         <button
           onClick={openModal}
@@ -155,15 +155,15 @@ export default function Transaksi() {
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-x-auto">
-        <table className="min-w-full border-separate border-spacing-y-1">
-          <thead className="bg-gray-100 text-sm text-gray-600">
+        <table className="min-w-full border-separate border-spacing-y-1 text-sm">
+          <thead className="bg-gray-100 text-gray-600">
             <tr>
-              <th className="text-left px-6 py-3 border-b">#</th>
-              <th className="text-left px-6 py-3 border-b">Kode</th>
-              <th className="text-left px-6 py-3 border-b">Tanggal</th>
-              <th className="text-left px-6 py-3 border-b">Pembeli</th>
-              <th className="text-left px-6 py-3 border-b">Total</th>
-              <th className="text-left px-6 py-3 border-b">Aksi</th>
+              <th className="text-left px-4 md:px-6 py-3 border-b">#</th>
+              <th className="text-left px-4 md:px-6 py-3 border-b">Kode</th>
+              <th className="text-left px-4 md:px-6 py-3 border-b">Tanggal</th>
+              <th className="text-left px-4 md:px-6 py-3 border-b">Pembeli</th>
+              <th className="text-left px-4 md:px-6 py-3 border-b">Total</th>
+              <th className="text-left px-4 md:px-6 py-3 border-b">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -176,15 +176,15 @@ export default function Transaksi() {
             ) : (
               transaksiList.map((trx, i) => (
                 <tr key={trx.id} className="hover:bg-gray-50 border-b">
-                  <td className="px-6 py-3 text-sm">{i + 1}</td>
-                  <td className="px-6 py-3 text-sm font-mono text-blue-700">{trx.kode}</td>
-                  <td className="px-6 py-3 text-sm">{new Date(trx.created_at).toLocaleString()}</td>
-                  <td className="px-6 py-3 text-sm">{trx.nama_pembeli || "-"}</td>
-                  <td className="px-6 py-3 text-sm font-semibold">{formatRupiah(trx.total_harga)}</td>
-                  <td className="px-6 py-3">
+                  <td className="px-4 md:px-6 py-3">{i + 1}</td>
+                  <td className="px-4 md:px-6 py-3 font-mono text-blue-700">{trx.kode}</td>
+                  <td className="px-4 md:px-6 py-3">{new Date(trx.created_at).toLocaleString()}</td>
+                  <td className="px-4 md:px-6 py-3">{trx.nama_pembeli || "-"}</td>
+                  <td className="px-4 md:px-6 py-3 font-semibold">{formatRupiah(trx.total_harga)}</td>
+                  <td className="px-4 md:px-6 py-3">
                     <button
                       onClick={() => handlePrint(trx.id)}
-                      className="flex items-center gap-1 text-sm px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                      className="flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                     >
                       <Printer size={16} /> Cetak
                     </button>
@@ -198,8 +198,8 @@ export default function Transaksi() {
 
       {/* Modal Transaksi Baru */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl relative">
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-start overflow-y-auto px-4 py-6">
+          <div className="bg-white rounded-lg shadow-lg p-4 w-full max-w-xl relative">
             <button onClick={closeModal} className="absolute top-3 right-3 text-gray-500 hover:text-black">
               <X />
             </button>
@@ -213,7 +213,7 @@ export default function Transaksi() {
                 className="w-full border px-3 py-2 rounded"
               />
               {items.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
+                <div key={index} className="flex flex-col md:flex-row items-stretch gap-2">
                   <select
                     value={item.produk_id}
                     onChange={(e) => handleChangeItem(index, "produk_id", e.target.value)}
@@ -231,11 +231,15 @@ export default function Transaksi() {
                     type="number"
                     value={item.jumlah}
                     onChange={(e) => handleChangeItem(index, "jumlah", parseInt(e.target.value))}
-                    className="w-24 border px-3 py-2 rounded"
+                    className="w-full md:w-24 border px-3 py-2 rounded"
                     min="1"
                     required
                   />
-                  <button type="button" onClick={() => handleRemoveItem(index)} className="text-red-600">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveItem(index)}
+                    className="text-red-600 hover:text-red-800"
+                  >
                     <Trash2 />
                   </button>
                 </div>

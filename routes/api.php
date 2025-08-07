@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\LaporanController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Models\User;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -41,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [TransactionController::class, 'destroy']);
     });
     Route::get('/laporan', [\App\Http\Controllers\Api\LaporanController::class, 'index']);
+    Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
 });
 
 //pdf-cetak
