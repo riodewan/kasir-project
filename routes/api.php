@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\LaporanController;
 use App\Http\Controllers\Api\DashboardController;
-use App\Models\User;
+use App\Http\Controllers\Api\UserController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/auth/google/redirect', [AuthController::class, 'redirect']);
@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('users', UserController::class);
     Route::apiResource('produk', ProductController::class);
     Route::prefix('kategori')->group(function () {
         Route::get('/', [CategoryController::class, 'index']);

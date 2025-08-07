@@ -9,6 +9,7 @@ import Transaksi from "./admin/pages/Transaksi";
 import Produk from "./admin/pages/Produk";
 import Kategori from "./admin/pages/Kategori"; // ✅ Tambah import kategori
 import Laporan from "./admin/pages/Laporan";
+import User from "./admin/pages/UserPage";
 
 import Login from "./admin/pages/Login";
 import Register from "./admin/pages/Register";
@@ -30,6 +31,7 @@ export default function App() {
           <Route element={<AdminLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="user" element={<User />} />
             <Route path="transaksi" element={<Transaksi />} />
             <Route path="produk" element={<Produk />} />
             <Route path="kategori" element={<Kategori />} /> {/* ✅ Tambah route kategori */}

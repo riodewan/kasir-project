@@ -8,11 +8,13 @@ import {
   LogOut,
   Menu,
   X,
+  User,
 } from "lucide-react";
 import { useState } from "react";
 
 const menu = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard size={20} /> },
+  { name: "User", path: "/admin/user", icon: <User size={20} /> },
   { name: "Transaksi", path: "/admin/transaksi", icon: <ShoppingCart size={20} /> },
   { name: "Produk", path: "/admin/produk", icon: <Package size={20} /> },
   { name: "Kategori", path: "/admin/kategori", icon: <FolderKanban size={20} /> },
