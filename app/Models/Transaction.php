@@ -19,6 +19,7 @@ class Transaction extends Model
         'nama_pembeli',
         'total_item',
         'total_harga',
+        'tunai'
     ];
 
     public function items()

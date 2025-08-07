@@ -103,68 +103,71 @@ export default function Kategori() {
 
   return (
     <div className="space-y-6 p-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold text-gray-700">📂 Manajemen Kategori</h1>
+        <h1 className="text-2xl font-bold text-gray-800">📂 Manajemen Kategori</h1>
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow"
         >
           <PlusCircle size={18} />
-          Tambah Kategori
+          Tambah
         </button>
       </div>
 
-      <form onSubmit={handleSearch} className="flex gap-2">
+      {/* Search */}
+      <form onSubmit={handleSearch} className="flex gap-2 max-w-sm">
         <input
           type="text"
           placeholder="Cari kategori..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border px-3 py-2 rounded-lg w-full max-w-sm"
+          className="border border-gray-300 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 rounded-lg w-full text-sm"
         />
         <button
           type="submit"
-          className="flex items-center gap-1 bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200"
+          className="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-sm px-3 py-2 rounded-lg"
         >
           <Search size={18} /> Cari
         </button>
       </form>
 
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-gray-100">
+      {/* Tabel */}
+      <div className="overflow-x-auto rounded-lg shadow border border-gray-200 bg-white">
+        <table className="min-w-full text-sm">
+          <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider text-xs">
             <tr>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">#</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Nama</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Aksi</th>
+              <th className="px-4 py-3 text-left">#</th>
+              <th className="px-4 py-3 text-left">Nama Kategori</th>
+              <th className="px-4 py-3 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="3" className="text-center py-8 text-gray-500">🔄 Memuat kategori...</td>
+                <td colSpan="3" className="text-center px-4 py-6 text-gray-500">🔄 Memuat data...</td>
               </tr>
             ) : kategoriList.length === 0 ? (
               <tr>
-                <td colSpan="3" className="text-center py-8 text-gray-500">Belum ada kategori.</td>
+                <td colSpan="3" className="text-center px-4 py-6 text-gray-500">Belum ada data kategori.</td>
               </tr>
             ) : (
               kategoriList.map((kat, index) => (
-                <tr key={kat.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm">{(pagination.current_page - 1) * 10 + index + 1}</td>
-                  <td className="px-6 py-4 font-medium text-gray-800">{kat.nama}</td>
-                  <td className="px-6 py-4 space-x-3">
+                <tr key={kat.id} className="hover:bg-gray-50 border-t">
+                  <td className="px-4 py-3 text-gray-700">{(pagination.current_page - 1) * 10 + index + 1}</td>
+                  <td className="px-4 py-3 text-gray-900 font-medium">{kat.nama}</td>
+                  <td className="px-4 py-3 text-center space-x-2">
                     <button
                       onClick={() => openModal(kat)}
-                      className="text-blue-600 hover:underline flex items-center gap-1"
+                      className="inline-flex items-center text-blue-600 hover:text-blue-800"
                     >
-                      <Pencil size={16} /> Edit
+                      <Pencil size={16} className="mr-1" /> Edit
                     </button>
                     <button
                       onClick={() => handleDelete(kat.id)}
-                      className="text-red-600 hover:underline flex items-center gap-1"
+                      className="inline-flex items-center text-red-600 hover:text-red-800"
                     >
-                      <Trash2 size={16} /> Hapus
+                      <Trash2 size={16} className="mr-1" /> Hapus
                     </button>
                   </td>
                 </tr>
@@ -174,27 +177,29 @@ export default function Kategori() {
         </table>
       </div>
 
-      <div className="flex justify-between items-center pt-4">
-        <p className="text-sm text-gray-600">
-          Halaman {pagination.current_page} dari {pagination.last_page}
+      {/* Pagination */}
+      <div className="flex justify-between items-center pt-4 text-sm text-gray-600">
+        <p>
+          Halaman <strong>{pagination.current_page}</strong> dari <strong>{pagination.last_page}</strong>
         </p>
         <div className="space-x-2">
           <button
             onClick={() => fetchKategori(pagination.current_page - 1, search)}
             disabled={pagination.current_page === 1}
-            className="px-3 py-1 rounded bg-gray-100 disabled:opacity-50"
+            className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
           >
             ← Sebelumnya
           </button>
           <button
             onClick={() => fetchKategori(pagination.current_page + 1, search)}
             disabled={pagination.current_page === pagination.last_page}
-            className="px-3 py-1 rounded bg-gray-100 disabled:opacity-50"
+            className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
           >
             Selanjutnya →
           </button>
         </div>
       </div>
+
 
       {/* Modal */}
       {isModalOpen && (
@@ -202,28 +207,28 @@ export default function Kategori() {
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
             <button
               onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-500 hover:text-black"
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
             >
               <X />
             </button>
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-xl font-semibold mb-4">
               {form.id ? "Edit Kategori" : "Tambah Kategori"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-700">Nama Kategori</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
                 <input
                   type="text"
                   value={form.nama}
                   onChange={(e) => setForm({ ...form, nama: e.target.value })}
-                  className="w-full border px-3 py-2 rounded-lg"
+                  className="w-full border border-gray-300 px-3 py-2 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
               </div>
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm shadow"
                 >
                   {form.id ? "Update" : "Simpan"}
                 </button>

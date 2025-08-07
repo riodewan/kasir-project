@@ -7,7 +7,7 @@ import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 
 export default function Produk() {
-    const [selectedKategori, setSelectedKategori] = useState("");
+  const [selectedKategori, setSelectedKategori] = useState("");
   const [produkList, setProdukList] = useState([]);
   const [kategoriList, setKategoriList] = useState([]);
   const [pagination, setPagination] = useState({ current_page: 1, last_page: 1 });
@@ -19,21 +19,21 @@ export default function Produk() {
   const fetchProduk = (page = 1, searchQuery = "", kategoriId = "") => {
     setLoading(true);
     axios
-        .get(`/api/produk?page=${page}&search=${searchQuery}&kategori_id=${kategoriId}`, {
+      .get(`/api/produk?page=${page}&search=${searchQuery}&kategori_id=${kategoriId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        })
-        .then((res) => {
+      })
+      .then((res) => {
         setProdukList(res.data.data || []);
         setPagination({
-            current_page: res.data.current_page,
-            last_page: res.data.last_page,
+          current_page: res.data.current_page,
+          last_page: res.data.last_page,
         });
-        })
-        .catch(() => {
+      })
+      .catch(() => {
         MySwal.fire("Gagal", "Tidak bisa memuat produk.", "error");
-        })
-        .finally(() => setLoading(false));
-    };
+      })
+      .finally(() => setLoading(false));
+  };
 
   const fetchKategori = () => {
     axios
@@ -82,7 +82,7 @@ export default function Produk() {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then(() => {
-        fetchProduk(pagination.current_page, search);
+        fetchProduk(pagination.current_page, search, selectedKategori);
         MySwal.fire("Berhasil", form.id ? "Produk diperbarui." : "Produk ditambahkan.", "success");
         closeModal();
       })
@@ -108,7 +108,7 @@ export default function Produk() {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           })
           .then(() => {
-            fetchProduk(pagination.current_page, search);
+            fetchProduk(pagination.current_page, search, selectedKategori);
             MySwal.fire("Berhasil", "Produk dihapus.", "success");
           })
           .catch(() => {
@@ -121,7 +121,15 @@ export default function Produk() {
   const handleSearch = (e) => {
     e.preventDefault();
     fetchProduk(1, search, selectedKategori);
-    };
+  };
+
+  const formatRupiah = (angka) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(angka);
+  };
 
   return (
     <div className="space-y-6 p-6">
@@ -135,50 +143,51 @@ export default function Produk() {
           Tambah Produk
         </button>
       </div>
-        <div className="flex gap-4 items-center">
-            <form onSubmit={handleSearch} className="flex gap-2">
-                <input
-                type="text"
-                placeholder="Cari produk..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border px-3 py-2 rounded-lg w-full max-w-sm"
-                />
-                <button
-                type="submit"
-                className="flex items-center gap-1 bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200"
-                >
-                <Search size={18} /> Cari
-                </button>
-            </form>
 
-            <select
-                value={selectedKategori}
-                onChange={(e) => {
-                setSelectedKategori(e.target.value);
-                fetchProduk(1, search, e.target.value);
-                }}
-                className="border px-3 py-2 rounded-lg"
-            >
-                <option value="">Semua Kategori</option>
-                {kategoriList.map((kategori) => (
-                <option key={kategori.id} value={kategori.id}>
-                    {kategori.nama}
-                </option>
-                ))}
-            </select>
-            </div>
+      <div className="flex flex-wrap gap-4 items-center">
+        <form onSubmit={handleSearch} className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Cari produk..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border px-3 py-2 rounded-lg w-full max-w-sm"
+          />
+          <button
+            type="submit"
+            className="flex items-center gap-1 bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200"
+          >
+            <Search size={18} /> Cari
+          </button>
+        </form>
+
+        <select
+          value={selectedKategori}
+          onChange={(e) => {
+            setSelectedKategori(e.target.value);
+            fetchProduk(1, search, e.target.value);
+          }}
+          className="border px-3 py-2 rounded-lg"
+        >
+          <option value="">Semua Kategori</option>
+          {kategoriList.map((kategori) => (
+            <option key={kategori.id} value={kategori.id}>
+              {kategori.nama}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-gray-100">
+        <table className="min-w-full table-fixed border-separate border-spacing-y-1">
+          <thead className="bg-gray-100 text-gray-600 text-sm text-left">
             <tr>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">#</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Nama</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Harga</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Stok</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Kategori</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Aksi</th>
+              <th className="px-6 py-3">#</th>
+              <th className="px-6 py-3">Nama</th>
+              <th className="px-6 py-3">Harga</th>
+              <th className="px-6 py-3">Stok</th>
+              <th className="px-6 py-3">Kategori</th>
+              <th className="px-6 py-3">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -190,21 +199,22 @@ export default function Produk() {
               </tr>
             ) : produkList.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center py-8 text-gray-500">Belum ada produk.</td>
+                <td colSpan="6" className="text-center py-8 text-gray-500">
+                  Belum ada produk.
+                </td>
               </tr>
             ) : (
               produkList.map((produk, index) => (
-                <tr key={produk.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm">
-                    {(pagination.current_page - 1) * 10 + index + 1}
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-800">{produk.nama}</td>
-                  <td className="px-6 py-4 text-gray-700">Rp {produk.harga.toLocaleString()}</td>
-                  <td className="px-6 py-4 text-gray-700">{produk.stok}</td>
-                  <td className="px-6 py-4 text-gray-700">
-                    {produk.kategori?.nama || "-"}
-                  </td>
-                  <td className="px-6 py-4 space-x-3">
+                <tr
+                  key={produk.id}
+                  className="bg-white border-b hover:bg-gray-50 text-sm text-gray-800"
+                >
+                  <td className="px-6 py-4">{(pagination.current_page - 1) * 10 + index + 1}</td>
+                  <td className="px-6 py-4 font-medium">{produk.nama}</td>
+                  <td className="px-6 py-4">{formatRupiah(produk.harga)}</td>
+                  <td className="px-6 py-4">{produk.stok}</td>
+                  <td className="px-6 py-4">{produk.kategori?.nama || "-"}</td>
+                  <td className="px-6 py-4 space-x-2 whitespace-nowrap">
                     <button
                       onClick={() => openModal(produk)}
                       className="text-blue-600 hover:underline flex items-center gap-1"
@@ -231,14 +241,14 @@ export default function Produk() {
         </p>
         <div className="space-x-2">
           <button
-            onClick={() => fetchProduk(pagination.current_page - 1, search)}
+            onClick={() => fetchProduk(pagination.current_page - 1, search, selectedKategori)}
             disabled={pagination.current_page === 1}
             className="px-3 py-1 rounded bg-gray-100 disabled:opacity-50"
           >
             ← Sebelumnya
           </button>
           <button
-            onClick={() => fetchProduk(pagination.current_page + 1, search)}
+            onClick={() => fetchProduk(pagination.current_page + 1, search, selectedKategori)}
             disabled={pagination.current_page === pagination.last_page}
             className="px-3 py-1 rounded bg-gray-100 disabled:opacity-50"
           >
@@ -247,7 +257,6 @@ export default function Produk() {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">

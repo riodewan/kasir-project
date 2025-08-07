@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\LaporanController;
 use App\Models\User;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -39,5 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [TransactionController::class, 'show']);
         Route::delete('/{id}', [TransactionController::class, 'destroy']);
     });
+    Route::get('/laporan', [\App\Http\Controllers\Api\LaporanController::class, 'index']);
 });
 
+//pdf-cetak
+Route::get('/cetak-struk/{id}', [TransactionController::class, 'cetakStruk']);
+Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPDF']);
+
+//excel
+Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel']);

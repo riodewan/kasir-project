@@ -9,6 +9,7 @@ use App\Models\TransactionItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TransactionController extends Controller
 {
@@ -39,6 +40,7 @@ class TransactionController extends Controller
     {
         $request->validate([
             'nama_pembeli' => 'nullable|string|max:255',
+            'tunai' => 'required|numeric|min:0',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.qty' => 'required|integer|min:1',
@@ -66,6 +68,7 @@ class TransactionController extends Controller
             $transaction = Transaction::create([
                 'kode' => $this->generateKodeTransaksi(),
                 'user_id' => Auth::id(),
+                'tunai' => $request->tunai,
                 'nama_pembeli' => $request->nama_pembeli,
                 'total_item' => $total_item,
                 'total_harga' => $total_harga,
@@ -119,5 +122,15 @@ class TransactionController extends Controller
         $transaction->delete();
 
         return response()->json(['message' => 'Transaksi berhasil dihapus.']);
+    }
+
+    public function cetakStruk($id)
+    {
+        $transaction = Transaction::with(['items.product', 'kasir'])->findOrFail($id);
+
+        $pdf = PDF::loadView('pdf.struk', ['transaction' => $transaction])
+            ->setPaper([0, 0, 203.15, 800], 'portrait'); 
+
+        return $pdf->stream('struk-transaksi.pdf');
     }
 }
