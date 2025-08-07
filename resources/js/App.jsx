@@ -16,6 +16,8 @@ import Register from "./admin/pages/Register";
 import GoogleCallback from "./src/pages/GoogleCallback";
 import Error404 from "./src/pages/Error404";
 
+import LandingPage from "./user/pages/LandingPage";
+
 export default function App() {
   return (
     <Router>
@@ -39,6 +41,9 @@ export default function App() {
           </Route>
         </Route>
 
+        {/* PUBLIC ROUTES */}
+        <Route path="/" element={<LandingPage />} />
+        
         {/* FALLBACK */}
         <Route path="*" element={<Error404 />} />
       </Routes>
